@@ -1,0 +1,16 @@
+credentials:
+  usernames:
+    victor:
+      email: victor@aberration.com
+      name: Victor
+      password: $2b$12$.ejUPQtRJR9cLgZd.e7fUeBpUFf5gXT/9RwXsZNCKhvWuT96wsywK
+    oscar:
+      email: Oscar@aberration.com
+      name: oscar
+      password: $2b$12$.5FGH9m6KT4yEJ3bTzIxSeBsXUyeqLgh/moyQLh2aJv711GuSWaVq
+cookie:
+  expiry_days: 30
+  key: random_signature_key # Must be string
+  name: random_cookie_name
+preauthorized:
+  emails:

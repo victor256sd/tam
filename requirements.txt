@@ -1,0 +1,14 @@
+asyncio
+openai
+openai-agents
+openpyxl
+pandas
+pathlib
+pillow
+pillow-heif
+PyPDF2
+pytesseract
+requests
+streamlit
+streamlit-authenticator
+tiktoken
