@@ -374,6 +374,7 @@ if st.session_state.get('authentication_status'):
     # the second for follow-up user questions).
     MODEL_LIST = ["gpt-4o-mini", "gpt-4.1-nano", "gpt-4.1-mini", "gpt-4.1"] #, "o4-mini"]
     VECTOR_STORE_ID = st.secrets["VECTOR_STORE_ID"]
+    VECTOR_STORE2_ID = st.secrets["VECTOR_STORE2_ID"]
     MATH_ASSISTANT_ID = st.secrets["MATH_ASSISTANT_ID"]
     MATH_ASSISTANT2_ID = st.secrets["MATH_ASSISTANT2_ID"]
     
@@ -399,7 +400,8 @@ if st.session_state.get('authentication_status'):
     # Create advanced options dropdown with upload file option.
     with st.expander("Advanced Options", expanded=True):
         cmte_ex = st.checkbox("Advisory mode - *Consult a multidisciplinary panel for personalized insights and perspectives*")
-        lib_ex = st.checkbox("Library mode - *Search trusted publications for authoritative answers*", value=True)
+        lib_ex = st.checkbox("Library mode - *Search trusted publications for authoritative answers*")
+        lib2_ex = st.checkbox("Library Lite mode - *Search public materials*", value=True)
         doc_ex = st.checkbox("Upload Excel, PDF, or image file for examination")
         
     # If there's no openai api key, stop.
@@ -560,8 +562,88 @@ if st.session_state.get('authentication_status'):
                 
                 # st.markdown(f"**Total Cost:** {formatted_cost}")
 
-    # If the option to upload a document was selected, allow for an upload and then 
-    # process it.
+    # If Library mode was selected.
+    if lib2_ex:
+        # Create new form to search aitam library vector store.    
+        with st.form(key="qa_form2", clear_on_submit=False):
+            query = st.text_area("**Search Library Lite Holdings:**")
+            submit = st.form_submit_button("Search")
+        # If submit button is clicked, query the aitam library.            
+        if submit:
+            # If form is submitted without a query, stop.
+            if not query:
+                st.error("Enter a question to search the library!")
+                st.stop()            
+            # Setup output columns to display results.
+            answer_col, sources_col = st.columns(2)
+            # Create new client for this submission.
+            client4 = OpenAI(api_key=openai_api_key)
+            # Query the aitam library vector store and include internet
+            # serach results.
+            with st.spinner('Calculating...'):
+                response4 = client4.responses.create(
+                    input = query,
+                    model = model,
+                    temperature = 0.3,
+                    tools = [{
+                                "type": "file_search",
+                                "vector_store_ids": [VECTOR_STORE2_ID],
+                    }],
+                    include=["output[*].file_search_call.search_results"]
+                )
+            # Write response to the answer column.    
+            with answer_col:
+                st.write("*Information is drawn from published public sources literature. For critical decisions, consult qualified legal, law enforcement, or threat professionals.*")
+                cleaned_response = re.sub(r'【.*?†.*?】', '', response4.output[1].content[0].text)
+                st.markdown("#### Response")
+                st.markdown(cleaned_response)
+            # Write files used to generate the answer.
+            with sources_col:            
+                st.markdown("#### Sources")
+                # Extract annotations from the response, and print source files.
+                annotations = response4.output[1].content[0].annotations
+                retrieved_files = set([response4.filename for response4 in annotations])
+                file_list_str = ", ".join(retrieved_files)
+                st.markdown(f"**File(s):** {file_list_str}")
+    
+                st.markdown("#### Token Usage")
+                input_tokens = response4.usage.input_tokens
+                output_tokens = response4.usage.output_tokens
+                total_tokens = input_tokens + output_tokens
+                input_tokens_str = f"{input_tokens:,}"
+                output_tokens_str = f"{output_tokens:,}"
+                total_tokens_str = f"{total_tokens:,}"
+    
+                st.markdown(
+                    f"""
+                    <p style="margin-bottom:0;">Input Tokens: {input_tokens_str}</p>
+                    <p style="margin-bottom:0;">Output Tokens: {output_tokens_str}</p>
+                    """,
+                    unsafe_allow_html=True
+                )
+                st.markdown(f"Total Tokens: {total_tokens_str}")
+    
+                if model == "gpt-4.1-nano":
+                    input_token_cost = .1/1000000
+                    output_token_cost = .4/1000000
+                elif model == "gpt-4o-mini":
+                    input_token_cost = .15/1000000
+                    output_token_cost = .6/1000000
+                elif model == "gpt-4.1":
+                    input_token_cost = 2.00/1000000
+                    output_token_cost = 8.00/1000000
+                elif model == "gpt-4.1-mini":
+                    input_token_cost = .4/1000000
+                    output_token_cost = 1.60/1000000
+                elif model == "o4-mini":
+                    input_token_cost = 1.10/1000000
+                    output_token_cost = 4.40/1000000
+    
+                cost = input_tokens*input_token_cost + output_tokens*output_token_cost
+                formatted_cost = "${:,.4f}".format(cost)
+                
+                st.markdown(f"**Total Cost:** {formatted_cost}")                
+                
     if doc_ex:
         # File uploader for Excel files
         uploaded_file = st.file_uploader("Choose an Excel, PDF, or image (heif, jpg, png) file", type=["xlsx","pdf","heif","jpg","png"], key="uploaded_file")
