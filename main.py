@@ -372,7 +372,7 @@ if st.session_state.get('authentication_status'):
 
     # Model list, Vector store ID, assistant IDs (one for initial upload eval, 
     # the second for follow-up user questions).
-    MODEL_LIST = ["gpt-4o-mini", "gpt-4.1-nano", "gpt-4.1-mini", "gpt-4.1"] #, "o4-mini"]
+    MODEL_LIST = ["gpt-4o-mini"] #, "gpt-4.1-nano", "gpt-4.1-mini", "gpt-4.1"] #, "o4-mini"]
     VECTOR_STORE_ID = st.secrets["VECTOR_STORE_ID"]
     VECTOR_STORE2_ID = st.secrets["VECTOR_STORE2_ID"]
     MATH_ASSISTANT_ID = st.secrets["MATH_ASSISTANT_ID"]
@@ -481,7 +481,7 @@ if st.session_state.get('authentication_status'):
             # Write response to the answer column.    
             with answer_col:
                 st.write("*Information is drawn from published sources and academic literature. For critical decisions, consult qualified legal, law enforcement, or threat professionals.*")
-                cleaned_response = re.sub(r'【.*?†.*?】', '', response2.final_output) #response2.output[1].content[0].text)
+                cleaned_response = re.sub(r'【.*?†.*?】', '', response2.output[1].content[0].text) #response2.output[1].content[0].text)
                 st.markdown("#### Response")
                 st.markdown(cleaned_response)
             # Write files used to generate the answer.
@@ -594,7 +594,7 @@ if st.session_state.get('authentication_status'):
             # Write response to the answer column.    
             with answer_col:
                 st.write("*Information is drawn from published public sources literature. For critical decisions, consult qualified legal, law enforcement, or threat professionals.*")
-                cleaned_response = re.sub(r'【.*?†.*?】', '', response4) #response4.output[1].content[0].text)
+                cleaned_response = re.sub(r'【.*?†.*?】', '', response4.output[1])
                 st.markdown("#### Response")
                 st.markdown(cleaned_response)
             # Write files used to generate the answer.
