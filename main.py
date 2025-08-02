@@ -594,7 +594,7 @@ if st.session_state.get('authentication_status'):
             # Write response to the answer column.    
             with answer_col:
                 st.write("*Information is drawn from published public sources literature. For critical decisions, consult qualified legal, law enforcement, or threat professionals.*")
-                cleaned_response = re.sub(r'【.*?†.*?】', '', response4.output[1].content.text)
+                cleaned_response = re.sub(r'【.*?†.*?】', '', response4.content[0].text.value) #output[1].content.text)
                 st.markdown("#### Response")
                 st.markdown(cleaned_response)
             # Write files used to generate the answer.
