@@ -594,14 +594,20 @@ if st.session_state.get('authentication_status'):
             # Write response to the answer column.    
             with answer_col:
                 st.write("*Information is drawn from published public sources literature. For critical decisions, consult qualified legal, law enforcement, or threat professionals.*")
-                cleaned_response = re.sub(r'【.*?†.*?】', '', response4.output[0].content[0].text)
+                try:
+                    cleaned_response = re.sub(r'【.*?†.*?】', '', response4.output[0].content[0].text)
+                except:
+                    cleaned_response = re.sub(r'【.*?†.*?】', '', response4.output[1].content[0].text)
                 st.markdown("#### Response")
                 st.markdown(cleaned_response)
             # Write files used to generate the answer.
             with sources_col:            
                 st.markdown("#### Sources")
                 # Extract annotations from the response, and print source files.
-                annotations = response4.output[0].content[0].annotations
+                try:
+                    annotations = response4.output[0].content[0].annotations
+                except:
+                    annotations = response4.output[1].content[0].annotations                    
                 retrieved_files = set([response4.filename for response4 in annotations])
                 file_list_str = ", ".join(retrieved_files)
                 st.markdown(f"**File(s):** {file_list_str}")
