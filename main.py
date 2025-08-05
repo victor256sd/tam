@@ -182,7 +182,7 @@ async def generate_response_cmte(model, vs_id, query_text):
         tools=[
             FileSearchTool(
                 max_num_results=3,
-                vector_store_ids=vs_id,
+                vector_store_ids=[vs_id],
             )
         ],
         model=model,
@@ -194,7 +194,7 @@ async def generate_response_cmte(model, vs_id, query_text):
         tools=[
             FileSearchTool(
                 max_num_results=3,
-                vector_store_ids=vs_id,
+                vector_store_ids=[vs_id],
             )
         ],
         model=model,
@@ -206,7 +206,7 @@ async def generate_response_cmte(model, vs_id, query_text):
         tools=[
             FileSearchTool(
                 max_num_results=3,
-                vector_store_ids=vs_id,
+                vector_store_ids=[vs_id],
             )
         ],
         model=model,
@@ -218,7 +218,7 @@ async def generate_response_cmte(model, vs_id, query_text):
         tools=[
             FileSearchTool(
                 max_num_results=3,
-                vector_store_ids=vs_id,
+                vector_store_ids=[vs_id],
             )
         ],
         model=model,
