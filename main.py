@@ -414,7 +414,7 @@ if st.session_state.get('authentication_status'):
         # Create new form to query AI assistant.    
         with st.form(key="cmte_form", clear_on_submit=False):
             query = st.text_area("**Consult Advisors:**")
-            submit = st.form_submit_button("Ask")
+            submit = st.form_submit_button("Send")
         # If submit button is clicked, query the aitam library.            
         if submit:
             # If form is submitted without a query, stop.
@@ -435,7 +435,7 @@ if st.session_state.get('authentication_status'):
                 response3 = asyncio.run(generate_response_cmte(model, VECTOR_STORE_ID, query))
             st.write("*The insights provided reflect expert perspectives but are not a substitute for professional advice. Please consult legal, law enforcement, or threat management professionals before making decisions.*")
             st.markdown("#### Response")
-            st.markdown(response3.RunResultBase.new_items)
+            st.markdown(response3.new_items)
             # st.markdown(response3.messages[-1]['content'])
             # report all properties of the object
             # for method in dir(response3):
