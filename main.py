@@ -435,7 +435,7 @@ if st.session_state.get('authentication_status'):
                 response3 = asyncio.run(generate_response_cmte(model, VECTOR_STORE_ID, query))
             st.write("*The insights provided reflect expert perspectives but are not a substitute for professional advice. Please consult legal, law enforcement, or threat management professionals before making decisions.*")
             st.markdown("#### Response")
-            st.markdown(response3.final_output)
+            st.markdown(response3.RunResultBase.new_items)
             # st.markdown(response3.messages[-1]['content'])
             # report all properties of the object
             # for method in dir(response3):
