@@ -399,9 +399,9 @@ if st.session_state.get('authentication_status'):
     
     # Create advanced options dropdown with upload file option.
     with st.expander("Advanced Options", expanded=True):
-        cmte_ex = st.checkbox("Advisory mode - *Consult a multidisciplinary panel for personalized insights and perspectives*")
-        lib_ex = st.checkbox("Library mode - *Search trusted publications for authoritative answers*")
-        lib2_ex = st.checkbox("Library Lite mode - *Search public materials*", value=True)
+        lib2_ex = st.checkbox("Library Basic - *Search public materials*", value=True)
+        lib_ex = st.checkbox("Library Pro - *Search trusted publications for authoritative answers*")
+        cmte_ex = st.checkbox("Advisory - *Consult a multidisciplinary panel for personalized insights and perspectives*")
         doc_ex = st.checkbox("Upload Excel, PDF, or image file for examination")
         
     # If there's no openai api key, stop.
