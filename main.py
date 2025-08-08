@@ -399,7 +399,7 @@ if st.session_state.get('authentication_status'):
     
     # Create advanced options dropdown with upload file option.
     with st.expander("Advanced Options", expanded=True):
-        lib2_ex = st.checkbox("Library Basic - *Search public materials*", value=True)
+        lib2_ex = st.checkbox("Library - *Search public materials*", value=True)
         lib_ex = st.checkbox("Library Pro - *Search trusted publications for authoritative answers*")
         cmte_ex = st.checkbox("Advisory - *Consult a multidisciplinary panel for personalized insights and perspectives*")
         doc_ex = st.checkbox("Upload Excel, PDF, or image file for examination")
@@ -453,7 +453,7 @@ if st.session_state.get('authentication_status'):
     if lib_ex:
         # Create new form to search aitam library vector store.    
         with st.form(key="qa_form", clear_on_submit=False):
-            query = st.text_area("**Search Library Holdings:**")
+            query = st.text_area("**Search Library Pro Holdings:**")
             submit = st.form_submit_button("Search")
         # If submit button is clicked, query the aitam library.            
         if submit:
@@ -566,7 +566,7 @@ if st.session_state.get('authentication_status'):
     if lib2_ex:
         # Create new form to search aitam library vector store.    
         with st.form(key="qa_form2", clear_on_submit=False):
-            query = st.text_area("**Search Library Lite Holdings:**")
+            query = st.text_area("**Search Library Holdings:**")
             submit = st.form_submit_button("Search")
         # If submit button is clicked, query the aitam library.            
         if submit:
